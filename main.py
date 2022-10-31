@@ -2,7 +2,6 @@ from threading import Thread
 from layout import Layout
 from chart import Chart
 import binance as bnb
-import pdb
 
 def on_click_seek(id_seek):
 	asset_1, last_1 = layout.get_seek(id_seek=Layout.SEEK_1)
