@@ -5,9 +5,9 @@ Simple binance dashboard desktop app based in Python
 This app allows to search all the cryptocurrency assets and pairs from binance, show their last close prices and get the percent change by interacting with the chart.
 
 - Standard library modules used:
- - Tkinter : Native python library to create GUI
- - Matplotlib : Popular library to make any kind of plotting.
- - Requests : Library intended to make GET and POST requests in Python.
+  - Tkinter : Native python library to create GUI
+  - Matplotlib : Popular library to make any kind of plotting.
+  - Requests : Library intended to make GET and POST requests in Python.
 
 - Project was made entirely in Python 3.9 and tested in Window 10.
 
