@@ -14,22 +14,23 @@ This app allows to search all the cryptocurrency assets and pairs from binance, 
 ## Setup
 
 - Clone the repository in your local machine.
-- Run the main.py file from the console as:
-  > python main.py
+- Run the app.py file from the console as:
+  > python app.py
 
 - How to use
 
 ## What I learned from this project
 
-- I learned to structure a project in different files in order to make it easier to scale the project as new features are added.
+- I learned to structure a project in different files using the MVC pattern in order to make it easier to scale the project as new features are added.
 
 - I learned to group different parts of the project as classes to make it easier to manage from the main file.
-
-- I used callback system to connect all the different functionalities in the main file.
 
 - Dived deep into the backend of Tkinter and Matplotlib libraries to better know how they work and then create better user experience features.
 
 ## Future Work
 <!-- - ~~Add TDD to test all the features.~~ ✅ -->
-- Add zoom-able and scrollable charts.
-- Show the start of each week to better see the historic proportions.
+[x] Use MCV pattern to organize the project.
+
+[] Add zoom-able and scrollable charts.
+
+[] Show the start of each week to better see the historic proportions.
