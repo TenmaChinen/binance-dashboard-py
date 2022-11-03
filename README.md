@@ -29,8 +29,18 @@ This app allows to search all the cryptocurrency assets and pairs from binance, 
 
 ## Future Work
 <!-- - ~~Add TDD to test all the features.~~ ✅ -->
-[x] Use MCV pattern to organize the project.
+- [x] Use MCV pattern to organize the project.
 
-[] Add zoom-able and scrollable charts.
+- [] Add zoom-able and scrollable charts.
 
-[] Show the start of each week to better see the historic proportions.
+- [] Show the start of each week to better see the historic proportions.
+
+
+## Samples
+
+### Main Screen
+![binance_dashboard_sample_1](https://user-images.githubusercontent.com/36393143/199762784-53c083b3-5780-4974-b8e3-7207fe6d36b7.png)
+
+### Assets Pairs Finder
+![binance_dashboard_sample_2](https://user-images.githubusercontent.com/36393143/199762837-3da735d0-7521-4dd5-9ca8-fac7b9d6fea3.png)
+
