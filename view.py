@@ -1,6 +1,5 @@
 from tkinter import Tk, Frame, Label, Entry, Button, Canvas, Scrollbar, StringVar
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.pyplot import Figure
+from chart import Chart
 
 d_frame = dict( padx = 5, pady= 5 )
 d_entry = dict( font = 'Arial 20 bold', bg = '#555555', fg = 'white', borderwidth=5, relief='flat', insertbackground='#F9AE58')
@@ -11,7 +10,7 @@ d_btn_close = dict( font = 'Arial 18 bold', fg = 'white', relief='flat', bd=0)
 d_btn_del = dict( font = 'Arial 18 bold', fg = 'white', relief='flat', bd=0, takefocus=False)
 d_btn_fav = dict(font = 'Arial 18 bold', fg = 'white', bg='#5B5B5B', relief='raised', activebackground='#656565', activeforeground='#F0F0F0' )
 
-class Layout:
+class View:
 	SEEK_1 = 0
 	SEEK_2 = 1
 	FAV = 2
@@ -19,7 +18,7 @@ class Layout:
 
 	def __init__(self):
 		self.root = self.__create_root()
-		self.canvas, self.fig = self.__create_figure()
+		self.chart = self.__create_chart()
 		self.fr_sidebar = self.__create_sidebar()
 		self.fr_favs = self.__create_frame_favs()
 		self.sv_asset_1 = self.__create_field(btn_callback=self.__on_click_seek_1)
@@ -27,7 +26,7 @@ class Layout:
 		self.sv_message = self.__create_message()
 		self.__create_toolbar()
 		self.fr_dialog, self.fr_scroll, self.canvas_scroll = self.__create_dialog()
-	
+
 		# self.show_dialog()
 
 
@@ -39,13 +38,13 @@ class Layout:
 		root.grid_rowconfigure(0, weight=1)
 		return root
 	
-	def __create_figure(self):
-		fig = Figure()
-		fig_canvas = FigureCanvasTkAgg(fig, master=self.root)
-		canvas = fig_canvas.get_tk_widget()
-		canvas.config(highlightthickness=0, bg='black')
+	def __create_chart(self):
+		chart = Chart(self.root)
+		chart.select_axis(chart.ax_1)
+		canvas = chart.canvas
 		canvas.grid(row=0, column=0, sticky='news')
-		return canvas, fig
+		canvas.config(highlightthickness=0, bg='black')
+		return chart
 
 	def __create_sidebar(self):
 		fr_sidebar = Frame(master=self.root, bg='#4C4C4C')
@@ -56,7 +55,7 @@ class Layout:
 	def __create_field(self,btn_callback):
 		
 		def on_validate(action_type,text):
-			if action_type == '1' and (len(text) > Layout.INPUT_MAX_LENGTH) :
+			if action_type == '1' and (len(text) > View.INPUT_MAX_LENGTH) :
 				return False
 			return True
 
@@ -151,7 +150,7 @@ class Layout:
 		return fr_dialog, fr_scroll, canvas
 
 	def __on_selected_option(self,option):
-		self.on_selected_option(option)
+		self.controller.on_selected_option(option)
 
 	def __on_canvas_configure(self,event):
 		self.__update_canvas()
@@ -162,23 +161,29 @@ class Layout:
 		canvas.itemconfig(self.id_canvas_fr_scroll, width=canvas.winfo_width())
 
 	def __on_click_seek_1(self):
-		self.on_click_seek(Layout.SEEK_1)
-		self.current_seek = Layout.SEEK_1
+		self.controller.on_click_seek(View.SEEK_1)
+		self.current_seek = View.SEEK_1
 			
 	def __on_click_seek_2(self):
-		self.on_click_seek(Layout.SEEK_2)
-		self.current_seek = Layout.SEEK_2
+		self.controller.on_click_seek(View.SEEK_2)
+		self.current_seek = View.SEEK_2
 
 	def __on_click_asset(self,asset):
-		self.on_click_asset(asset)
+		self.controller.on_click_asset(asset)
 
 	def __on_press_enter(self):
-		self.on_press_enter()
+		self.controller.on_press_enter()
+
+	def __on_click_fav(self,text):
+		self.controller.on_click_fav(text)
+
+	def set_controller(self,controller):
+		self.controller = controller
 
 	def add_favourite(self,text):
 		if not self.fav_exists(text):
 			button = Button(master=self.fr_favs, text=text, **d_btn_fav)
-			button['command'] = lambda : self.on_select_fav(text)
+			button['command'] = lambda : self.__on_click_fav(text)
 			button.pack(side='top', fill='x')
 			self.root.update()
 
@@ -188,15 +193,6 @@ class Layout:
 				return True
 		return False
 
-	def set_callbacks(self,
-		on_click_seek, on_click_asset, on_press_enter,
-		on_selected_option, on_select_fav):
-		self.on_click_seek = on_click_seek
-		self.on_click_asset = on_click_asset
-		self.on_press_enter = on_press_enter
-		self.on_selected_option = on_selected_option
-		self.on_select_fav = on_select_fav
-
 	def set_assets(self,asset_1,asset_2):
 		return self.sv_asset_1.set(asset_1), self.sv_asset_1.get(asset_2)
 
@@ -204,7 +200,7 @@ class Layout:
 		return self.sv_asset_1.get(), self.sv_asset_2.get()
 
 	def get_seek(self,id_seek):
-		if id_seek == Layout.SEEK_1:
+		if id_seek == View.SEEK_1:
 			sv = self.sv_asset_1
 		else:
 			sv = self.sv_asset_2
@@ -243,7 +239,7 @@ class Layout:
 		for text,(r,c) in zip(l_texts,l_row_col):
 			button = Button(master=self.fr_scroll, text=text, **d_btn_dialog)
 			button.grid(row=r,column=c,stick='news')
-			button['command'] = lambda asset=text: self.on_click_asset(asset)
+			button['command'] = lambda asset=text: self.__on_click_asset(asset)
 
 		for c in range(n_cols):
 			self.fr_scroll.grid_columnconfigure(c, weight=1, uniform='column')

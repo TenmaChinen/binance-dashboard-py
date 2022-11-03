@@ -1,16 +1,23 @@
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.pyplot import Figure
 from datetime import datetime
-
 
 class Chart:
 
-    def __init__(self, fig):
-        self.fig = fig
+    def __init__(self, parent):
+        self.parent = parent
+        self.fig = self.__create_fig()
+        self.canvas = self.fig.canvas.get_tk_widget()
         self.__create_plots()
         self.__create_hlines()
         self.fig.tight_layout()
-        self.fig.subplots_adjust(
-            wspace=0, hspace=0.15, left=0.02, bottom=0.05, right=0.95)
+        self.fig.subplots_adjust(wspace=0, hspace=0.15, left=0.02, bottom=0.05, right=0.95)
         self.__set_events()
+
+    def __create_fig(self):
+        fig = Figure()
+        canvas_tk_agg = FigureCanvasTkAgg(fig, master=self.parent)
+        return fig
 
     def __create_plots(self):
         self.ax_1 = self.fig.add_subplot(211)
@@ -61,6 +68,8 @@ class Chart:
     def set_data(self, title, x_data, y_data, ax=None):
         if ax is None:
             ax = self.selected_axis
+
+        self.pct_tool.clear()
 
         ax.set_title(title, x=0.01, y=0.94, ha='left', va='top')
         lines = ax.get_lines()[0]
@@ -124,6 +133,7 @@ class PercentTool:
         self.update_xdelta()
         self.line_1.set_xdata(self.x_min_max(x))
         self.line_1.set_ydata(y)
+        self.line_1.set_visible(True)
         self.line_2.set_visible(False)
 
     def set_moving(self, x, y):
@@ -156,3 +166,8 @@ class PercentTool:
         y_2 = self.line_2.get_ydata()
         y_min, y_max = sorted((y_1, y_2))
         return (y_max - y_min) / y_min * 100
+
+    def clear(self):
+        self.text.set_text(None)
+        self.line_1.set_visible(False)
+        self.line_2.set_visible(False)

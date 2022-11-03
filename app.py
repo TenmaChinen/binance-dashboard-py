@@ -1,18 +1,20 @@
-from callbacks import Callbacks
-from layout import Layout
-from chart import Chart
+from controller import Controller
+from view import View
+
+class App:
+	def __init__(self):
+		self.view = View()
+		self.controller = Controller(self.view)
+		self.view.set_controller(self.controller)
+
+		# Default
+		self.view.sv_asset_1.set('BNB')
+		self.view.sv_asset_2.set('USDT')
+		# load_plot()		
+
+	def run(self):
+		self.view.root.mainloop()
 
 if __name__ == '__main__' :
-	layout = Layout()
-	root, fig = layout.root, layout.fig
-	chart = Chart(fig)
-	chart.select_axis(chart.ax_1)
-
-	callbacks = Callbacks(layout, chart)
-
-	# Test
-	layout.sv_asset_1.set('BNB')
-	layout.sv_asset_2.set('USDT')
-	# load_plot()
-
-	root.mainloop()
+	app = App()
+	app.run()
