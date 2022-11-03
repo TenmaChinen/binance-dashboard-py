@@ -31,9 +31,9 @@ This app allows to search all the cryptocurrency assets and pairs from binance, 
 <!-- - ~~Add TDD to test all the features.~~ ✅ -->
 - [x] Use MCV pattern to organize the project.
 
-- [] Add zoom-able and scrollable charts.
+- [ ] Add zoom-able and scrollable charts.
 
-- [] Show the start of each week to better see the historic proportions.
+- [ ] Show the start of each week to better see the historic proportions.
 
 
 ## Samples
